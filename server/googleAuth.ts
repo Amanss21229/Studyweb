@@ -110,8 +110,15 @@ export async function setupAuth(app: Express) {
     req.logout((err) => {
       if (err) {
         console.error('Logout error:', err);
+        return res.status(500).json({ error: 'Logout failed' });
       }
-      res.redirect("/");
+      req.session.destroy((sessionErr) => {
+        if (sessionErr) {
+          console.error('Session destroy error:', sessionErr);
+        }
+        res.clearCookie('connect.sid');
+        res.redirect("/");
+      });
     });
   });
 }
