@@ -28,25 +28,25 @@ CREATE TABLE IF NOT EXISTS users (
     first_name VARCHAR,
     last_name VARCHAR,
     profile_image_url VARCHAR,
-    
+
     -- User profile data (saved after login)
     name TEXT,
     gender VARCHAR(10),
     class VARCHAR(20),
     stream VARCHAR(50),
     is_profile_complete BOOLEAN NOT NULL DEFAULT FALSE,
-    
+
     -- Preferences
     language VARCHAR(10) NOT NULL DEFAULT 'english',
     theme VARCHAR(10) NOT NULL DEFAULT 'light',
-    
+
     -- Usage tracking
     daily_usage_minutes INTEGER NOT NULL DEFAULT 0,
     last_usage_reset TIMESTAMP NOT NULL DEFAULT NOW(),
-    
+
     -- Chat adaptation preferences
     conversation_preferences JSONB,
-    
+
     -- Timestamps
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
@@ -73,16 +73,16 @@ CREATE TABLE IF NOT EXISTS questions (
     conversation_id VARCHAR NOT NULL REFERENCES conversations(id),
     question_text TEXT NOT NULL,
     input_type VARCHAR(10) NOT NULL, -- 'text', 'image', 'audio'
-    
+
     -- Categorization
     subject VARCHAR(100), -- 'physics', 'chemistry', 'math', 'biology'
     chapter TEXT,
     topic TEXT,
-    
+
     -- Media URLs
     image_url TEXT,
     audio_url TEXT,
-    
+
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -95,21 +95,21 @@ CREATE TABLE IF NOT EXISTS solutions (
     question_id VARCHAR NOT NULL REFERENCES questions(id),
     solution_text TEXT NOT NULL,
     explanation TEXT,
-    
+
     -- Categorization
     subject VARCHAR(100) NOT NULL,
     chapter TEXT,
     topic TEXT,
-    
+
     -- NEET/JEE Previous Year Questions references
     neet_jee_pyq JSONB,
-    
+
     -- Language and sharing
     language VARCHAR(10) NOT NULL,
     share_url TEXT NOT NULL UNIQUE,
     is_public BOOLEAN NOT NULL DEFAULT FALSE,
     is_bookmarked BOOLEAN NOT NULL DEFAULT FALSE,
-    
+
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
