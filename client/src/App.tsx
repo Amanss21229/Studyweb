@@ -12,11 +12,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Languages, Moon, Sun, User, LogOut, UserCircle } from "lucide-react";
+import { Languages, Moon, Sun, User, UserCircle } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useAuth } from "@/hooks/useAuth";
-import { redirectToLogin, redirectToLogout } from "@/lib/authUtils";
+import { redirectToLogin } from "@/lib/authUtils";
 import logoImage from "@assets/IMG_20250913_000900_129_1759602426440.jpg";
 import Home from "@/pages/Home";
 import CompleteProfile from "@/pages/CompleteProfile";
@@ -164,14 +164,6 @@ function Header() {
                       >
                         <UserCircle className="h-4 w-4 mr-2" />
                         My Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={redirectToLogout}
-                        className="text-destructive"
-                        data-testid="logout-button"
-                      >
-                        <LogOut className="h-4 w-4 mr-2" />
-                        Logout
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
