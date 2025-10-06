@@ -27,7 +27,6 @@ export default function History() {
 
   const { data: history, isLoading } = useQuery<HistoryItem[]>({
     queryKey: ['/api/history'],
-    enabled: !!user,
   });
 
   const groupByDate = (items: HistoryItem[] = []) => {
@@ -47,22 +46,6 @@ export default function History() {
   };
 
   const groupedHistory = groupByDate(history);
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" data-testid="history-page">
-        <Card className="p-8 text-center max-w-md">
-          <h2 className="text-2xl font-bold mb-4">Login Required</h2>
-          <p className="text-muted-foreground mb-6">
-            Please log in to view your conversation history.
-          </p>
-          <Button asChild>
-            <a href="/api/auth/google">Login with Google</a>
-          </Button>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background" data-testid="history-page">

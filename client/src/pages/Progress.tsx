@@ -37,24 +37,7 @@ export default function Progress() {
 
   const { data: progress, isLoading } = useQuery<ProgressData>({
     queryKey: ['/api/progress'],
-    enabled: !!user,
   });
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" data-testid="progress-page">
-        <Card className="p-8 text-center max-w-md">
-          <h2 className="text-2xl font-bold mb-4">Login Required</h2>
-          <p className="text-muted-foreground mb-6">
-            Please log in to view your progress and analytics.
-          </p>
-          <Button asChild>
-            <a href="/api/auth/google">Login with Google</a>
-          </Button>
-        </Card>
-      </div>
-    );
-  }
 
   const totalSubjects = Object.keys(progress?.subjectBreakdown || {}).length;
   const maxQuestions = Math.max(...Object.values(progress?.subjectBreakdown || {}).map(s => s.count), 1);

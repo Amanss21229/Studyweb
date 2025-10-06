@@ -31,7 +31,6 @@ export default function SavedSolutions() {
 
   const { data: savedSolutions, isLoading } = useQuery<SavedSolution[]>({
     queryKey: ['/api/saved-solutions'],
-    enabled: !!user,
   });
 
   const handleCopy = async (url: string, id: string) => {
@@ -43,22 +42,6 @@ export default function SavedSolutions() {
       console.error('Failed to copy:', error);
     }
   };
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" data-testid="saved-solutions-page">
-        <Card className="p-8 text-center max-w-md">
-          <h2 className="text-2xl font-bold mb-4">Login Required</h2>
-          <p className="text-muted-foreground mb-6">
-            Please log in to view your saved solutions.
-          </p>
-          <Button asChild>
-            <a href="/api/auth/google">Login with Google</a>
-          </Button>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background" data-testid="saved-solutions-page">
