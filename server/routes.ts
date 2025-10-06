@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { storage } from "./storage";
 import { generateSolution, generateConversationTitle } from "./services/openai";
 import { extractTextFromImage } from "./services/ocr";
-import { setupAuth, isAuthenticated, checkFreeUserLimit, requireAuthForPremiumFeatures } from "./googleAuth";
+import { setupAuth, isAuthenticated, checkFreeUserLimit, requireAuthForPremiumFeatures, getUserId } from "./googleAuth";
 import { generateApiKey, hashApiKey, validateApiKey } from "./apiKeyAuth";
 import { 
   insertQuestionSchema, 
@@ -162,8 +162,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { title } = req.body;
       
-      // Use authenticated user ID if logged in, otherwise null for guest
-      const userId = req.isAuthenticated() ? req.user.id : null;
+      // Use authenticated user ID if logged in, otherwise guest session ID
+      const userId = getUserId(req);
       
       const conversation = await storage.createConversation({
         userId,
@@ -474,9 +474,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get user's conversation history
-  app.get("/api/history", isAuthenticated, async (req: any, res: Response) => {
+  app.get("/api/history", async (req: any, res: Response) => {
     try {
-      const userId = req.user.id;
+      const userId = getUserId(req);
       const history = await storage.getUserHistory(userId);
       res.json(history);
     } catch (error) {
@@ -486,9 +486,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get bookmarked solutions
-  app.get("/api/saved-solutions", isAuthenticated, async (req: any, res: Response) => {
+  app.get("/api/saved-solutions", async (req: any, res: Response) => {
     try {
-      const userId = req.user.id;
+      const userId = getUserId(req);
       const bookmarked = await storage.getBookmarkedSolutions(userId);
       res.json(bookmarked);
     } catch (error) {
@@ -498,9 +498,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get user progress analytics
-  app.get("/api/progress", isAuthenticated, async (req: any, res: Response) => {
+  app.get("/api/progress", async (req: any, res: Response) => {
     try {
-      const userId = req.user.id;
+      const userId = getUserId(req);
       const progress = await storage.getUserProgress(userId);
       res.json(progress);
     } catch (error) {
@@ -510,7 +510,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Toggle bookmark on solution
-  app.post("/api/solutions/:id/bookmark", isAuthenticated, async (req: Request, res: Response) => {
+  app.post("/api/solutions/:id/bookmark", async (req: any, res: Response) => {
     try {
       const { id } = req.params;
       const solution = await storage.toggleBookmark(id);

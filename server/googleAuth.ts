@@ -18,13 +18,14 @@ export function getSession() {
     secret: process.env.SESSION_SECRET!,
     store: sessionStore,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: sessionTtl,
     },
+    proxy: true,
   });
 }
 
@@ -179,3 +180,17 @@ export const requireAuthForPremiumFeatures: RequestHandler = (req, res, next) =>
   }
   next();
 };
+
+// Helper function to get user ID (authenticated user or guest session ID)
+export function getUserId(req: any): string {
+  if (req.isAuthenticated() && req.user?.id) {
+    return req.user.id;
+  }
+  
+  // For guest users, use or create a session-based guest ID
+  if (!req.session.guestUserId) {
+    req.session.guestUserId = `guest_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+  }
+  
+  return req.session.guestUserId;
+}
