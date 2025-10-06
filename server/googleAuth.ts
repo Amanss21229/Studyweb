@@ -22,6 +22,7 @@ export function getSession() {
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: sessionTtl,
     },
   });
@@ -116,8 +117,13 @@ export async function setupAuth(app: Express) {
         if (sessionErr) {
           console.error('Session destroy error:', sessionErr);
         }
-        res.clearCookie('connect.sid');
-        res.redirect("/");
+        res.clearCookie('connect.sid', {
+          path: '/',
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+        });
+        res.json({ success: true, message: 'Logged out successfully' });
       });
     });
   });
