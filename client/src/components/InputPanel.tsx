@@ -22,6 +22,8 @@ import { AudioRecorder } from "@/lib/audio";
 import { useLanguage } from "./LanguageProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { redirectToLogin } from "@/lib/authUtils";
+import { MathEquationEditor } from "./MathEquationEditor";
+import { DrawingCanvas } from "./DrawingCanvas";
 
 type InputMode = 'text' | 'image' | 'audio';
 
@@ -40,6 +42,8 @@ export function InputPanel({ onSubmitText, onSubmitImage, onSubmitAudio, isLoadi
   const [isRecording, setIsRecording] = useState(false);
   const [recordingStatus, setRecordingStatus] = useState('Click microphone to start recording');
   const [showWaveform, setShowWaveform] = useState(false);
+  const [showMathEditor, setShowMathEditor] = useState(false);
+  const [showDrawingCanvas, setShowDrawingCanvas] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const audioRecorderRef = useRef<AudioRecorder | null>(null);
@@ -258,6 +262,8 @@ export function InputPanel({ onSubmitText, onSubmitImage, onSubmitAudio, isLoadi
                         size="sm"
                         className="text-muted-foreground hover:text-primary btn-icon p-1"
                         title="Add equation"
+                        onClick={() => setShowMathEditor(true)}
+                        data-testid="open-math-editor"
                       >
                         <SquareRadical className="h-4 w-4" />
                       </Button>
@@ -266,6 +272,8 @@ export function InputPanel({ onSubmitText, onSubmitImage, onSubmitAudio, isLoadi
                         size="sm"
                         className="text-muted-foreground hover:text-primary btn-icon p-1"
                         title="Add diagram"
+                        onClick={() => setShowDrawingCanvas(true)}
+                        data-testid="open-drawing-canvas"
                       >
                         <PenTool className="h-4 w-4" />
                       </Button>
@@ -392,6 +400,38 @@ export function InputPanel({ onSubmitText, onSubmitImage, onSubmitAudio, isLoadi
           </div>
         </CardContent>
       </Card>
+
+      {/* Math Equation Editor */}
+      <MathEquationEditor
+        open={showMathEditor}
+        onOpenChange={setShowMathEditor}
+        onSubmitEquation={(equation) => {
+          setTextInput(textInput + (textInput ? '\n\n' : '') + equation);
+          toast({
+            title: "Equation added",
+            description: "Mathematical equation added to your question",
+          });
+        }}
+      />
+
+      {/* Drawing Canvas */}
+      <DrawingCanvas
+        open={showDrawingCanvas}
+        onOpenChange={setShowDrawingCanvas}
+        onSubmitDrawing={(imageData) => {
+          toast({
+            title: "Drawing added",
+            description: "Your drawing has been added. You can now submit your question with the diagram.",
+          });
+          // Convert base64 to file and submit as image
+          fetch(imageData)
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], "drawing.png", { type: "image/png" });
+              onSubmitImage(file);
+            });
+        }}
+      />
     </div>
   );
 }
