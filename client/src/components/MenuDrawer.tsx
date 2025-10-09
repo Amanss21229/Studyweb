@@ -61,7 +61,7 @@ export function MenuDrawer() {
         <Button 
           variant="ghost" 
           size="icon"
-          className="fixed top-20 left-4 z-[100] hover:bg-primary/10 bg-background/80 backdrop-blur-sm shadow-md"
+          className="fixed top-4 left-4 z-[100] hover:bg-primary/10 bg-background/80 backdrop-blur-sm shadow-md"
           data-testid="menu-drawer-trigger"
         >
           <Menu className="h-6 w-6" />
