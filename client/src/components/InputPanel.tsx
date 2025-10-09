@@ -256,26 +256,42 @@ export function InputPanel({ onSubmitText, onSubmitImage, onSubmitAudio, isLoadi
                     data-testid="question-input"
                   />
                   <div className="flex items-center justify-between mt-2 px-1">
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center gap-2">
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
-                        className="text-muted-foreground hover:text-primary btn-icon p-1"
-                        title="Add equation"
-                        onClick={() => setShowMathEditor(true)}
+                        className="hover:bg-primary/10 hover:border-primary flex items-center gap-1"
+                        title="Add Mathematical Equation"
+                        onClick={() => {
+                          console.log("Math editor button clicked!", showMathEditor);
+                          toast({
+                            title: "Opening Math Editor",
+                            description: "Mathematical equation editor is loading..."
+                          });
+                          setShowMathEditor(true);
+                        }}
                         data-testid="open-math-editor"
                       >
-                        <SquareRadical className="h-4 w-4" />
+                        <SquareRadical className="h-5 w-5" />
+                        <span className="text-xs">Math</span>
                       </Button>
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
-                        className="text-muted-foreground hover:text-primary btn-icon p-1"
-                        title="Add diagram"
-                        onClick={() => setShowDrawingCanvas(true)}
+                        className="hover:bg-primary/10 hover:border-primary flex items-center gap-1"
+                        title="Draw Diagram"
+                        onClick={() => {
+                          console.log("Drawing canvas button clicked!", showDrawingCanvas);
+                          toast({
+                            title: "Opening Drawing Canvas",
+                            description: "Drawing canvas is loading..."
+                          });
+                          setShowDrawingCanvas(true);
+                        }}
                         data-testid="open-drawing-canvas"
                       >
-                        <PenTool className="h-4 w-4" />
+                        <PenTool className="h-5 w-5" />
+                        <span className="text-xs">Draw</span>
                       </Button>
                     </div>
                     <span className="text-xs text-muted-foreground">
