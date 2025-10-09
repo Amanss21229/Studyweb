@@ -18,6 +18,7 @@ import { useLanguage } from "@/components/LanguageProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { redirectToLogin } from "@/lib/authUtils";
 import logoImage from "@assets/IMG_20250913_000900_129_1759602426440.jpg";
+import { MenuDrawer } from "@/components/MenuDrawer";
 import Home from "@/pages/Home";
 import CompleteProfile from "@/pages/CompleteProfile";
 import Profile from "@/pages/Profile";
@@ -239,6 +240,7 @@ function App() {
           <TooltipProvider>
             <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
               <Header />
+              <MenuDrawer />
               <Router />
               <Toaster />
             </div>
